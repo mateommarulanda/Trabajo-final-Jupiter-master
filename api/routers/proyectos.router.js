@@ -44,7 +44,7 @@ router.put('/proyectos', async (req, res)=>{
 router.delete('/proyectos/:codigo', async (req, res)=>{
     try{
         let codigo = req.params.codigo
-        let respuesta_db = await controller.eliminarProyecto(proyecto)
+        let respuesta_db = await controller.eliminarProyecto(codigo)
         let info = respuesta_db.rowCount == 1? `Proyecto elimiando: ${codigo}` : ''
         let message = respuesta_db.rowCount == 1? 'Proyecto eliminado' : 'No se eliminó el proyecto'
         return res.send({ok: respuesta_db.rowCount == 1, message, info})

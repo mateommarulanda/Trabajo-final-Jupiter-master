@@ -1,8 +1,8 @@
-const express = require('express')
-const router = express.Router()
 
+const { crearToken } = require('../services/jwt.service');
 const PostgresService = require('../services/postgres.service');
 const _pg = new PostgresService()
+
 
 /**
  * Crear un usuario en base de datos
@@ -12,7 +12,7 @@ const _pg = new PostgresService()
 const crearUsuario = async (usuario) => {
     const sql = 'INSERT INTO public.usuarios (nombre, id, apellidos, rol, clave) VALUES($1, $2, $3, $4, md5($5));'
     const datos = [usuario.nombre, usuario.id, usuario.apellidos, usuario.rol, usuario.clave]
-    return await _pg.ejecutarQuery(sql,datos)
+    return await _pg.ejecutarQuery(sql, datos)
 }
 
 /**
@@ -30,7 +30,7 @@ const consultarUsuarios = async (id) => {
 }
 
 /**
- * Eliminar usuario de base de datos
+ * Eliminar usuario de la base de datos
  * @param {String} id Id del usuario
  * @returns Informacion de la ejecucion en base de datos
  */
@@ -47,9 +47,23 @@ const modificarUsuario = async (usuario) => {
 }
 
 const login = async (credenciales) => {
-    let sql = 'SELECT nombre, apellidos, rol, id  FROM usuarios WHERE id=$1 and clave = md5($2)'
+    let sql = 'SELECT nombre, apellidos, rol, id  FROM usuarios WHERE id=$1 and clave=md5($2)'
     const datos = [credenciales.id, credenciales.clave]
-    return await _pg.ejecutarQuery(sql, datos)
+    let respuesta_db = await _pg.ejecutarQuery(sql, datos)
+    let usuario = respuesta_db.rowCount == 1 ? respuesta_db.rows[0] : null
+    if (usuario) {
+        let token = crearToken(usuario)
+
+        return {
+            token,
+            nombre_completo: usuario.nombre + ' ' + usuario.apellidos,
+            rol: usuario.rol
+
+        }
+
+    } else {
+        return undefined
+    }
 }
 
-module.exports = { login, modificarUsuario, eliminarUsuario, crearUsuario, consultarUsuarios}
+module.exports = { login, modificarUsuario, eliminarUsuario, crearUsuario, consultarUsuarios }

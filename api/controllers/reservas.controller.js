@@ -6,13 +6,14 @@ const _pg = new PostgresService()
 
 /**
  * Crear una reserva en base de datos   
- * @param {*} reserva Reservas a guardar '{id,lugar,hora}'
+ * @param {*} reserva Reservas a guardar '{id,lugar,hora, dia}'
  * @returns informacion de la ejecucion en base de datos
  */
 
  const crearReserva = async (reserva) => {
-    const sql = 'INSERT INTO public.reservas (id, lugar, hora) VALUES($1, $2, $3); '
-    const datos = [reserva.id, reserva.lugar, reserva.hora]
+    //const verifica = 'SELECT public.reservas (id, lugar, hora, dia) VALUES($1, $2, $3, $4); ';
+    const sql = 'INSERT INTO public.reservas (id, lugar, hora, dia) VALUES($1, $2, $3, $4); '
+    const datos = [reserva.id, reserva.lugar, reserva.hora, reserva.dia]
     //reservas.push(reserva)
     return await _pg.ejecutarQuery(sql, datos)
 }
@@ -21,7 +22,7 @@ const _pg = new PostgresService()
  * Consultar todos los usuarios de la base de datos 
  */
 const consultarReserva = async (id) => {
-    let sql = 'SELECT id, lugar, hora  FROM reservas'
+    let sql = 'SELECT id, lugar, hora, dia  FROM reservas'
     if (id) {
         sql += ` WHERE id = $1`
         const datos = [id]
@@ -45,8 +46,8 @@ const eliminarReserva = async (id) => {
 
 
 const modificarReserva = async (reserva) => {
-    const sql = 'UPDATE public.reservas SET lugar=$1, hora=$2 WHERE id=$3;'
-    const datos = [reserva.lugar, reserva.hora, reserva.id]
+    const sql = 'UPDATE public.reservas SET lugar=$1, hora=$2, dia=$4 WHERE id=$3;'
+    const datos = [reserva.lugar, reserva.hora, reserva.dia, reserva.id]
     return await _pg.ejecutarQuery(sql, datos)
 }
 

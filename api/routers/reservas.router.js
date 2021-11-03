@@ -15,7 +15,7 @@ router.post('/Reservas', async (req,res) =>{
     } catch (error) {
         let codigo_pg = error.code
         if (codigo_pg == '23505') {
-            return res.status(400).send({ ok: false, message: `La reserva (${reserva.nombre}) ya esta creada.`, info: null })
+            return res.status(400).send({ ok: false, message: `La reserva (${reserva.id}) ya esta creada.`, info: null })
         } else {
             console.log(error);
             return res.status(500).send({ ok: false, message: 'Ha ocurrido un error no controlado', info: error })
@@ -44,7 +44,7 @@ router.delete('/Reservas/:id', async (req, res) => {
     try {
         let id = req.params.id
         let respuesta_db = await controller.eliminarReserva(id)
-        let info = respuesta_db.rowCount == 1 ? `Usuario eliminado: ${id}` : ''
+        let info = respuesta_db.rowCount == 1 ? `Reserva eliminada: ${id}` : ''
         let message = respuesta_db.rowCount == 1 ? 'reserva eliminado correctamente' : 'No se eliminado la reserva.'
         return res.send({ ok: respuesta_db.rowCount == 1, message, info })
     } catch (error) {
