@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const controller = require('../controllers/usuarios.controller')
+const { validarToken } = require('../services/jwt.service');
 
 // CREAR USUARIO
 
@@ -66,6 +67,7 @@ router.get('/usuarios/:id?', (req, res) => {
 
 })
 
+//CONSULTAR USUARIO LOGIN TOKEN 
 router.get('/validar-token', (req, res) => {
     try {
         let token = req.query.token

@@ -4,8 +4,6 @@ const router = express.Router()
 const controller = require('../controllers/usuarios.controller')
 
 
-
-
 // Consultar usuario login
 router.post('/login', async (req, res) => {
     let credenciales = req.body

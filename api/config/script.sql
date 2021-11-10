@@ -11,6 +11,7 @@ CREATE TABLE public.categorias (
 );
 CREATE TABLE public.reservas (
 	id varchar NOT NULL,
+	dia varchar NOT NULL,
 	lugar varchar NOT NULL,
 	hora int NOT NULL
 );

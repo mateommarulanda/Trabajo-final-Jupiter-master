@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router()
 
 const controller = require('../controllers/categorias.controllers')
+const { validarToken } = require('../services/jwt.service');
 
 // CREAR CATEGORIA
 
